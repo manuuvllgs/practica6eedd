@@ -26,6 +26,8 @@ unsigned long djb2(std::string str) {
     return hash;
 }
 
+// Hola
+
 
 int main() {
     // Lectura de coches y guardado en avlCoches
