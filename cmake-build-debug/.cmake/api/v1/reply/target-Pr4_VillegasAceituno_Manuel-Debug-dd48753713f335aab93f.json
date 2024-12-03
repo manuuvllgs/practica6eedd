@@ -104,7 +104,9 @@
 			"sourceIndexes" : 
 			[
 				7,
-				9
+				9,
+				10,
+				11
 			]
 		}
 	],
@@ -166,6 +168,16 @@
 		{
 			"backtrace" : 1,
 			"path" : "ThashUsuario.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "MallaRegular.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "Casilla.h",
 			"sourceGroupIndex" : 1
 		}
 	],

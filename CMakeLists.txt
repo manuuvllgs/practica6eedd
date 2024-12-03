@@ -14,4 +14,6 @@ add_executable(Pr4_VillegasAceituno_Manuel
         UTM.h
         Trayecto.cpp
         ThashUsuario.h
+        MallaRegular.h
+        Casilla.h
 )
