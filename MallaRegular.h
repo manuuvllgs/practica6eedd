@@ -20,13 +20,16 @@ class MallaRegular {
 
     std::vector<std::vector<Casilla<T> > > mr;
 
+public:
     Casilla<T> *obtenerCasilla(float x, float y) {
         int i = (x - _aXMin) / tamaCasillaX;
         int j = (y - _aYMin) / tamaCasillaY;
         return &mr[i][j];
     }
 
-public:
+
+    MallaRegular() = default;
+
     MallaRegular(float aXMin, float aYMin, float aXMax, float aYMax, int nDiv): _aXMin(aXMin), _aXMax(aXMax),
         _aYMin(aYMin), _aYMax(aYMax) {
         tamaCasillaX = (aXMax - aXMin) / nDiv;
@@ -66,7 +69,7 @@ public:
 
         float coordenadas = radio / 111.1;
 
-        Casilla esquinaIzqSup = obtenerCasilla(xcentro - coordenadas, ycentro + coordenadas),
+        Casilla<T> esquinaIzqSup = obtenerCasilla(xcentro - coordenadas, ycentro + coordenadas),
                 esquinaDerSup = obtenerCasilla(xcentro + coordenadas, ycentro + coordenadas),
                 esquinaIzqInf = obtenerCasilla(xcentro - coordenadas, ycentro - coordenadas),
                 esquinaDerInf = obtenerCasilla(xcentro + coordenadas, ycentro - coordenadas),
@@ -144,7 +147,6 @@ public:
         return numElementos / numCasillas;
     }
 };
-
 
 
 #endif //MALLREGULAR_H
