@@ -7,6 +7,7 @@
 
 #include <list>
 #include <map>
+#include <cmath>
 #include "vector"
 #include "Coche.h"
 #include "MallaRegular.h"
@@ -26,7 +27,8 @@ private:
     MallaRegular<Coche *> locate;
 
 public:
-    Reanelcar() = default;
+    Reanelcar(): _users(), _cars(), _sites(), _userNIF(), locate() {
+    }
 
     ~Reanelcar() = default;
 
@@ -83,72 +85,114 @@ public:
     Usuario *buscarUsuNifTHash(unsigned long clave, std::string nif);
 
     void borrarUsuarioTHash(unsigned long clave, std::string nif);
+
+
+    // Práctica 6
+
+    void rellenaMalla() {
+        // No se que cojones hay que hacer aquí la puta práctica es una mierda
+    }
+
+    // En la practica pone que tiene que ser unsigned float pero NO EXISTE UNSIGNED FLOAT ME CAGO EN DIOS
+    std::vector<Coche *> buscarCochesRadio(UTM pos, float radioKm) {
+        return locate.buscarRadio(pos.lat(), pos.lon(), radioKm);
+    }
+
+// Tu sabes por qué en la practica pone que tiene que devolver un vector de coches si solo tiene que devolver uno?
+/* FixMe Aqui lo que intento hacer es situarme en la casilla que se me pasa como parametro, una vez ahi la guardo en
+ * FixMe una variable. En otra variable de tipo coche guardo el primer coche de la lista de esa casilla y el iterador
+ * FixMe lo situo de la misma manera al principio. La distancia la intento calcular con el teorema de pitagoras.
+ * FixMe Despues con un for y un iterador recorro toda la lista y voy calculando la distancia de cada coche y
+ * FixMe comparandola con la distancia menor que es la del primer coche de la lista.
+ * ToDo PORRO LA VERDAD NO SE SI FUNCIONA
+ *
+Coche* buscarCocheMasCercano(UTM pos) {
+    Casilla<Coche*> dondeEstoy = locate.obtenerCasilla(pos.lat(),pos.lon());
+    auto itCoches = dondeEstoy.puntos.begin();
+    Coche* toRet = itCoches.operator*();
+    float distancia_menor = sqrt(std::abs((toRet->getX() - pos.lat()))+std::abs((toRet->getY()-pos.lon())));
+    for (; itCoches != dondeEstoy.puntos.end(); ++itCoches) {
+        float distancia = 0;
+        distancia = sqrt(std::abs((itCoches.operator*()->getX() - pos.lat()))+std::abs((itCoches.operator*()->getY()-pos.lon())));
+        if (distancia < distancia_menor) {
+            toRet = itCoches.operator*();
+        }
+    }
+*/
+
+
+
+
+
 };
 
 class Usuario {
 private:
-    std::string _nif;
-    std::string _clave;
-    std::string _nombre;
-    std::string _direccion;
-    Coche *rent = nullptr;
-    Reanelcar *usrReanel = nullptr;
-    std::multimap<Fecha, Trayecto> _route;
-    int _puntos = 100;
+std::string _nif;
+std::string _clave;
+std::string _nombre;
+std::string _direccion;
+Coche *rent = nullptr;
+Reanelcar *usrReanel = nullptr;
+std::multimap<Fecha, Trayecto> _route;
+int _puntos = 100;
 
 public:
-    Usuario(const std::string &nif, const std::string &clave, const std::string &nombre, const std::string &direccion);
+Usuario(const std::string &nif, const std::string &clave, const std::string &nombre, const std::string &direccion);
 
-    Usuario() = default;
+Usuario() = default;
 
-    //No hacemos el constructor de copia porque no puede haber dos usuarios iguales
-    void setCoche(Coche *c);
+//No hacemos el constructor de copia porque no puede haber dos usuarios iguales
+void setCoche(Coche *c);
 
-    const std::string getNif() const;
+const std::string getNif() const;
 
-    const std::string &getClave() const;
+const std::string &getClave() const;
 
-    const std::string &getNombre() const;
+const std::string &getNombre() const;
 
-    const std::string &getDireccion() const;
+const std::string &getDireccion() const;
 
-    Coche *getRent() const;
+Coche *getRent() const;
 
-    Coche &cogeCoche();
+Coche &cogeCoche();
 
-    Coche &linkReanel();
+Coche &linkReanel();
 
-    void set_usr_reanel(Reanelcar *usr_reanel) {
-        usrReanel = usr_reanel;
-    }
+void set_usr_reanel(Reanelcar *usr_reanel) {
+    usrReanel = usr_reanel;
+}
 
-    //Practica 4
-    Trayecto *crearTrayecto(PuntoRecarga *orig, PuntoRecarga *dest, Fecha &fInicio, Fecha &fFin);
+//Practica 4
+Trayecto *crearTrayecto(PuntoRecarga *orig, PuntoRecarga *dest, Fecha &fInicio, Fecha &fFin);
 
-    Coche *iniciaTrayecto(int idPuntoInicio, int idPuntoFinal, Fecha &fInicio, Fecha &fFin);
+Coche *iniciaTrayecto(int idPuntoInicio, int idPuntoFinal, Fecha &fInicio, Fecha &fFin);
 
-    void aparcaCoche(Coche *c, PuntoRecarga *pr, int retraso);
+void aparcaCoche(Coche *c, PuntoRecarga *pr, int retraso);
 
-    std::multimap<Fecha, Trayecto> &getTrayectosFecha(const Fecha &f);
+std::multimap<Fecha, Trayecto> &getTrayectosFecha(const Fecha &f);
 
-    Trayecto *getTrayecto(Fecha &fIni);
+Trayecto *getTrayecto(Fecha &fIni);
 
-    void mostarDatos();
+void mostarDatos();
 
-    std::multimap<Fecha, Trayecto> route() const {
-        return _route;
-    }
+std::multimap<Fecha, Trayecto> route() const {
+    return _route;
+}
 
-    //Practica 5
+//Practica 5
 
-    int decrementaPuntos(int retraso);
+int decrementaPuntos(int retraso);
 
-    void eliminarTrayectos();
+void eliminarTrayectos();
 
-    int getPuntos() const {
-        return _puntos;
-    }
+int getPuntos() const {
+    return _puntos;
+}
+
 };
 
 
 #endif //PR2_VILLEGASACEITUNO_MANUEL_REANELCAR_H
+
+
