@@ -1,4 +1,4 @@
- //
+//
 // Created by Danidel on 25/09/2024.
 //
 
@@ -19,28 +19,35 @@ private:
     std::string _id_matricula;
     std::string _marca;
     std::string _modelo;
-    float nivelBateria = std::rand() % (100-20+1) + 20;;
-    PuntoRecarga* _charging = nullptr;
+    float nivelBateria = std::rand() % (100 - 20 + 1) + 20;;
+    PuntoRecarga *_charging = nullptr;
+    UTM _posicion;
 
 public:
+    Coche(): _id_matricula(), _marca(), _modelo(), _posicion(0, 0) {
+    }
 
-    Coche(){
-        Coche("","","");
+    float getY() {
+        return _posicion.lon();
+    }
+
+    float getX() {
+        return _posicion.lat();
     }
 
     Coche(std::string id_matricula, std::string marca, std::string modelo);
 
     Coche(const Coche &otro);
 
-    void setCharging(PuntoRecarga* charging);
+    void setCharging(PuntoRecarga *charging);
 
     Coche &operator=(const Coche &otro);
 
-    bool operator>(const Coche &otro) const ;
+    bool operator>(const Coche &otro) const;
 
-    bool operator<(const Coche &otro) const ;
+    bool operator<(const Coche &otro) const;
 
-    bool operator==(const Coche &otro) const ;
+    bool operator==(const Coche &otro) const;
 
     const std::string &getIdMatricula() const;
 
@@ -59,29 +66,35 @@ public:
     bool aparcar(PuntoRecarga *pr);
 
     void mostrarCoche();
-
 };
 
 
-
 class PuntoRecarga {
-public: friend class Coche;
+public:
+    friend class Coche;
+
 private:
     int _id;
     UTM _lugar;
     int _max = 0;
     int _cochAlm = 0;
-    std::priority_queue<Coche*> _almacenados;
+    std::priority_queue<Coche *> _almacenados;
+
 public:
     PuntoRecarga(int id, float latitud, float longitud, int max);
-    Coche* getMaxBateria();
+
+    Coche *getMaxBateria();
+
     bool addCoche(Coche *c);
+
     int getNumCoches();
+
     int getID();
 
     int max() const {
         return _max;
     }
+
     void mostrarDatosCochesAlmacenados();
 };
 
@@ -92,13 +105,14 @@ private:
     int _idTrayecto = 0;
     Fecha _fechaInicio;
     Fecha _fechaFinal;
-    PuntoRecarga* _origin = nullptr;
-    PuntoRecarga* _destination = nullptr;
-    Coche* _inthecar = nullptr;
+    PuntoRecarga *_origin = nullptr;
+    PuntoRecarga *_destination = nullptr;
+    Coche *_inthecar = nullptr;
 
 public:
-    Trayecto(PuntoRecarga &orig, PuntoRecarga &dest,Fecha &fInicio,Fecha &fFin);
-    void setCoche(Coche* c);
+    Trayecto(PuntoRecarga &orig, PuntoRecarga &dest, Fecha &fInicio, Fecha &fFin);
+
+    void setCoche(Coche *c);
 
     int getIdTrayecto() const;
 
@@ -124,8 +138,6 @@ public:
 
     void setInthecar(Coche *inthecar);
 };
-
-
 
 
 #endif //PRACTICA01_COCHE_H
