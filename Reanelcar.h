@@ -9,8 +9,8 @@
 #include <map>
 #include "vector"
 #include "Coche.h"
+#include "MallaRegular.h"
 #include "stdexcept"
-
 
 
 class Usuario;
@@ -22,14 +22,19 @@ private:
     std::list<Usuario> _users;
     std::map<std::string, Coche> _cars;
     std::vector<PuntoRecarga> _sites;
-    ThashUsuario* _userNIF = nullptr;
-
+    ThashUsuario *_userNIF = nullptr;
+    MallaRegular<Coche *> locate;
 
 public:
-    ThashUsuario* getUserNIF() {
+    Reanelcar() = default;
+
+    ~Reanelcar() = default;
+
+    ThashUsuario *getUserNIF() {
         return _userNIF;
     }
-    void creaTablaHash(ThashUsuario* tabla) {
+
+    void creaTablaHash(ThashUsuario *tabla) {
         _userNIF = tabla;
     }
 
@@ -52,7 +57,7 @@ public:
     //Debe de ser un puntero para que pueda devolver nulo
     Usuario *buscarUsrNif(std::string nif);
 
-    std::list<Usuario*> &buscarUsrNomb(std::string nom);
+    std::list<Usuario *> &buscarUsrNomb(std::string nom);
 
     //Debe de ser un puntero para que pueda devolver nulo
     Coche *buscarCochMat(std::string mat);
@@ -69,20 +74,15 @@ public:
 
     int pruebaEj1(int &capTotal);
 
-    std::vector<std::pair<Usuario*,Trayecto>> trayectosEnFecha(Fecha &f);
+    std::vector<std::pair<Usuario *, Trayecto> > trayectosEnFecha(Fecha &f);
 
     // Práctica 5
 
     void mostrarEstadoTabla();
 
-    Usuario* buscarUsuNifTHash(unsigned long clave , std::string nif);
+    Usuario *buscarUsuNifTHash(unsigned long clave, std::string nif);
 
-    void borrarUsuarioTHash(unsigned long clave , std::string nif);
-
-
-
-
-
+    void borrarUsuarioTHash(unsigned long clave, std::string nif);
 };
 
 class Usuario {
@@ -123,15 +123,15 @@ public:
     }
 
     //Practica 4
-    Trayecto *crearTrayecto(PuntoRecarga *orig, PuntoRecarga *dest,Fecha &fInicio,Fecha &fFin);
+    Trayecto *crearTrayecto(PuntoRecarga *orig, PuntoRecarga *dest, Fecha &fInicio, Fecha &fFin);
 
-    Coche *iniciaTrayecto(int idPuntoInicio, int idPuntoFinal,Fecha &fInicio,Fecha &fFin);
+    Coche *iniciaTrayecto(int idPuntoInicio, int idPuntoFinal, Fecha &fInicio, Fecha &fFin);
 
     void aparcaCoche(Coche *c, PuntoRecarga *pr, int retraso);
 
     std::multimap<Fecha, Trayecto> &getTrayectosFecha(const Fecha &f);
 
-    Trayecto* getTrayecto(Fecha &fIni);
+    Trayecto *getTrayecto(Fecha &fIni);
 
     void mostarDatos();
 
@@ -149,15 +149,6 @@ public:
         return _puntos;
     }
 };
-
-
-
-
-
-
-
-
-
 
 
 #endif //PR2_VILLEGASACEITUNO_MANUEL_REANELCAR_H

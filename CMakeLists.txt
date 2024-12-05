@@ -4,7 +4,6 @@ project(Pr4_VillegasAceituno_Manuel)
 set(CMAKE_CXX_STANDARD 20)
 
 add_executable(Pr4_VillegasAceituno_Manuel
-        main.cpp
         Coche.cpp
         fecha.cpp
         PuntoRecarga.cpp
@@ -16,4 +15,5 @@ add_executable(Pr4_VillegasAceituno_Manuel
         ThashUsuario.h
         MallaRegular.h
         Casilla.h
+        main.cpp
 )

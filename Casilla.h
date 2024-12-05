@@ -12,7 +12,6 @@ class Casilla {
     std::list<T> puntos;
 
 public:
-    friend class MallaRegular<T>;
 
     Casilla(): puntos() {
     }
