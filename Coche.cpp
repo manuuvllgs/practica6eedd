@@ -8,11 +8,11 @@
 
 Coche::Coche(std::string id_matricula, std::string marca, std::string modelo): _id_matricula(id_matricula),
                                                                                _marca(marca),
-                                                                               _modelo(modelo), _charging(nullptr) {
+                                                                               _modelo(modelo), _charging(nullptr),_posicion(0,0) {
 }
 
 Coche::Coche(const Coche &otro): _id_matricula(otro._id_matricula), _marca(otro._marca), _modelo(otro._modelo),
-                                 nivelBateria(otro.nivelBateria), _charging(otro._charging) {
+                                 nivelBateria(otro.nivelBateria), _charging(otro._charging), _posicion(otro._posicion.lat(),otro._posicion.lon()) {
 }
 
 Coche &Coche::operator=(const Coche &otro) {
