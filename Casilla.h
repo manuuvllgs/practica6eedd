@@ -9,9 +9,11 @@
 
 template<typename T>
 class Casilla {
-    std::list<T> puntos;
 
 public:
+    std::list<T> puntos;
+
+
 
     Casilla(): puntos() {
     }
