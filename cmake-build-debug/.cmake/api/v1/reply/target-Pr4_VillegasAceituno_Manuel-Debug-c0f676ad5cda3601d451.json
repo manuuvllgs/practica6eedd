@@ -2,10 +2,7 @@
 	"artifacts" : 
 	[
 		{
-			"path" : "Pr4_VillegasAceituno_Manuel.exe"
-		},
-		{
-			"path" : "Pr4_VillegasAceituno_Manuel.pdb"
+			"path" : "Pr4_VillegasAceituno_Manuel"
 		}
 	],
 	"backtrace" : 1,
@@ -38,7 +35,7 @@
 			"compileCommandFragments" : 
 			[
 				{
-					"fragment" : "-g -std=gnu++20 -fdiagnostics-color=always"
+					"fragment" : "-g -std=gnu++20 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.1.sdk -fcolor-diagnostics"
 				}
 			],
 			"language" : "CXX",
@@ -75,16 +72,12 @@
 			{
 				"fragment" : "",
 				"role" : "flags"
-			},
-			{
-				"fragment" : "-lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32",
-				"role" : "libraries"
 			}
 		],
 		"language" : "CXX"
 	},
 	"name" : "Pr4_VillegasAceituno_Manuel",
-	"nameOnDisk" : "Pr4_VillegasAceituno_Manuel.exe",
+	"nameOnDisk" : "Pr4_VillegasAceituno_Manuel",
 	"paths" : 
 	{
 		"build" : ".",

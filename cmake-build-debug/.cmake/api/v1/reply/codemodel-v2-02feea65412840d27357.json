@@ -6,7 +6,7 @@
 			[
 				{
 					"build" : ".",
-					"jsonFile" : "directory-.-Debug-d0094a50bb2071803777.json",
+					"jsonFile" : "directory-.-Debug-f5ebdc15457944623624.json",
 					"minimumCMakeVersion" : 
 					{
 						"string" : "3.27.8"
@@ -39,7 +39,7 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "Pr4_VillegasAceituno_Manuel::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-Pr4_VillegasAceituno_Manuel-Debug-03f8c77c369a6c47c473.json",
+					"jsonFile" : "target-Pr4_VillegasAceituno_Manuel-Debug-c0f676ad5cda3601d451.json",
 					"name" : "Pr4_VillegasAceituno_Manuel",
 					"projectIndex" : 0
 				}
@@ -49,8 +49,8 @@
 	"kind" : "codemodel",
 	"paths" : 
 	{
-		"build" : "C:/Users/manuv/OneDrive/Documentos/GitHub/practica6eedd/cmake-build-debug",
-		"source" : "C:/Users/manuv/OneDrive/Documentos/GitHub/practica6eedd"
+		"build" : "/Users/manuvillegas/Documents/GitHub/practica6eedd/cmake-build-debug",
+		"source" : "/Users/manuvillegas/Documents/GitHub/practica6eedd"
 	},
 	"version" : 
 	{
