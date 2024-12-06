@@ -24,7 +24,7 @@ private:
     std::map<std::string, Coche> _cars;
     std::vector<PuntoRecarga> _sites;
     ThashUsuario *_userNIF = nullptr;
-    MallaRegular<Coche *> locate;
+    MallaRegular<Coche *> *locate;
 
 public:
     Reanelcar(): _users(), _cars(), _sites(), _userNIF(), locate() {
@@ -88,39 +88,72 @@ public:
 
 
     // Práctica 6
-
-    void rellenaMalla() {
-        // No se que cojones hay que hacer aquí la puta práctica es una mierda
+    float haversine1(UTM utm1, UTM utm2) {
+        float radio_tierra = 6378;
+        float incrLat = (utm2.lat() - utm1.lat()) * (M_PI / 180);
+        float incrLon = (utm2.lon() - utm1.lon()) * (M_PI / 180);
+        float a = sin(incrLat / 2) * sin(incrLat / 2) + cos(utm1.lat() * (M_PI / 180)) * cos(utm2.lat() * (M_PI / 180))
+                  * sin(incrLon / 2) * sin(incrLon / 2);
+        float c = 2 * atan2(sqrt(a), sqrt(1 - a));
+        float d = radio_tierra * c;
+        return d;
     }
 
+
+
+
+
+private:
+    void rellenaMalla(Coche* aInsertar) {
+        locate->insertar(aInsertar->getX(),aInsertar->getX(),aInsertar);
+    }
+public:
     // En la practica pone que tiene que ser unsigned float pero NO EXISTE UNSIGNED FLOAT ME CAGO EN DIOS
     std::vector<Coche *> buscarCochesRadio(UTM pos, float radioKm) {
-        return locate.buscarRadio(pos.lat(), pos.lon(), radioKm);
+        return locate->buscarRadio(pos.lat(), pos.lon(), radioKm);
     }
 
 // Tu sabes por qué en la practica pone que tiene que devolver un vector de coches si solo tiene que devolver uno?
 /* FixMe Aqui lo que intento hacer es situarme en la casilla que se me pasa como parametro, una vez ahi la guardo en
- * FixMe una variable. En otra variable de tipo coche guardo el primer coche de la lista de esa casilla y el iterador
- * FixMe lo situo de la misma manera al principio. La distancia la intento calcular con el teorema de pitagoras.
- * FixMe Despues con un for y un iterador recorro toda la lista y voy calculando la distancia de cada coche y
- * FixMe comparandola con la distancia menor que es la del primer coche de la lista.
- * ToDo PORRO LA VERDAD NO SE SI FUNCIONA
+ *  una variable. En otra variable de tipo coche guardo el primer coche de la lista de esa casilla y el iterador
+ *  lo situo de la misma manera al principio. La distancia la intento calcular con el teorema de pitagoras.
+ *  Despues con un for y un iterador recorro toda la lista y voy calculando la distancia de cada coche y
+ *  comparandola con la distancia menor que es la del primer coche de la lista.
  *
-Coche* buscarCocheMasCercano(UTM pos) {
-    Casilla<Coche*> dondeEstoy = locate.obtenerCasilla(pos.lat(),pos.lon());
-    auto itCoches = dondeEstoy.puntos.begin();
-    Coche* toRet = itCoches.operator*();
-    float distancia_menor = sqrt(std::abs((toRet->getX() - pos.lat()))+std::abs((toRet->getY()-pos.lon())));
-    for (; itCoches != dondeEstoy.puntos.end(); ++itCoches) {
-        float distancia = 0;
-        distancia = sqrt(std::abs((itCoches.operator*()->getX() - pos.lat()))+std::abs((itCoches.operator*()->getY()-pos.lon())));
-        if (distancia < distancia_menor) {
-            toRet = itCoches.operator*();
+ **/
+std::vector<Coche*> buscarCocheMasCercano(UTM pos) {
+        MallaRegular<Coche*>::Casilla* dondeEstoy = locate->obtenerCasilla(pos.lat(),pos.lon());
+        int distancia = 10;
+        float comprobacion=0;
+        bool encontrado = false;
+        float disMenor = 100000;
+        std::vector<Coche*> aux;
+        while(!encontrado && distancia<99999) {
+            aux = buscarCochesRadio(pos,distancia);
+            if(aux.size() > 0 ) {
+                encontrado = true;
+            }
+            else {distancia*=5;}
         }
+        std::vector<Coche*> toRet;
+
+        for (int i = 0; i<aux.size(); i++) {
+            UTM posCoche(aux[i]->getX(),aux[i]->getY());
+            comprobacion = haversine1(pos,posCoche);
+           if (comprobacion < disMenor) {
+               disMenor = comprobacion;
+               toRet.clear();
+               toRet.push_back(aux[i]);
+           }
+        }
+        return toRet;
+
     }
-*/
 
-
+void crearMalla(float aXMin, float aYMin, float aXMax, float aYMax,float ndiv) {
+        MallaRegular<Coche *> *aux = new MallaRegular<Coche *>(aXMin,aYMin,aXMax,aYMax,ndiv);
+        locate = aux;
+    }
 
 
 

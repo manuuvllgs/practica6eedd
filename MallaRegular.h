@@ -4,7 +4,7 @@
 
 #ifndef MALLREGULAR_H
 #define MALLREGULAR_H
-#include "Casilla.h"
+
 #include <cmath>
 
 #include "UTM.h"
@@ -12,16 +12,55 @@
 
 template<typename T>
 class MallaRegular {
+public:
+    class Casilla {
+
+    public:
+        std::list<T> puntos;
+
+
+
+        Casilla(): puntos() {
+        }
+
+        void insertar(const T &dato) {
+            puntos.push_back(dato);
+        }
+
+        T *buscar(const T &dato) {
+            auto it = puntos.begin();
+            for (; it != puntos.end(); ++it) {
+                if (*it == dato) {
+                    return &(*it);
+                }
+            }
+            return 0;
+        }
+
+        bool borrar(const T &dato) {
+            auto it = puntos.begin();
+            for (; it != puntos.end(); ++it) {
+                if (it == dato) {
+                    puntos.erase(it);
+                    return true;
+                }
+            }
+            return false;
+        }
+    };
+
+
+private:
     float _aXMin = 0;
     float _aXMax = 0;
     float _aYMin = 0;
     float _aYMax = 0;
     float tamaCasillaX, tamaCasillaY;
 
-    std::vector<std::vector<Casilla<T> > > mr;
+    std::vector<std::vector<Casilla > > mr;
 
 public:
-    Casilla<T> *obtenerCasilla(float x, float y) {
+    Casilla *obtenerCasilla(float x, float y) {
         int i = (x - _aXMin) / tamaCasillaX;
         int j = (y - _aYMin) / tamaCasillaY;
         return &mr[i][j];
@@ -34,21 +73,21 @@ public:
         _aYMin(aYMin), _aYMax(aYMax) {
         tamaCasillaX = (aXMax - aXMin) / nDiv;
         tamaCasillaY = (aYMax - aYMin) / nDiv;
-        mr.insert(mr.begin(), nDiv, std::vector<Casilla<T> >(nDiv));
+        mr.insert(mr.begin(), nDiv, std::vector<Casilla >(nDiv));
     };
 
     void insertar(float x, float y, const T &dato) {
-        Casilla<T> *c = obtenerCasilla(x, y);
+        Casilla *c = obtenerCasilla(x, y);
         c->insertar(dato);
     }
 
     T buscar(float x, float y, const T &dato) {
-        Casilla<T> *c = obtenerCasilla(x, y);
+        Casilla *c = obtenerCasilla(x, y);
         return *c->buscar(dato);
     }
 
     bool borrar(float x, float y, const T &dato) {
-        Casilla<T> *c = obtenerCasilla(x, y);
+        Casilla *c = obtenerCasilla(x, y);
         return c->borrar(dato);
     }
 
@@ -63,51 +102,60 @@ public:
         return d;
     }
 
+    std::vector<T> buscarRadio(float xcentro, float ycentro, float radio)
+    {
+        std::vector<T> toRet;
 
-    std::vector<T> buscarRadio(float xcentro, float ycentro, float radio) {
-        std::vector<T> resultado;
+        double limiteIzq, limiteDer, limiteInf, limiteSup, coordX, coordY;
 
-        float coordenadas = radio / 111.1;
+        coordX = xcentro;
+        coordY = ycentro;
 
-        Casilla<T> esquinaIzqSup = obtenerCasilla(xcentro - coordenadas, ycentro + coordenadas),
-                esquinaDerSup = obtenerCasilla(xcentro + coordenadas, ycentro + coordenadas),
-                esquinaIzqInf = obtenerCasilla(xcentro - coordenadas, ycentro - coordenadas),
-                esquinaDerInf = obtenerCasilla(xcentro + coordenadas, ycentro - coordenadas),
-                centro = obtenerCasilla(xcentro, ycentro);
-
-
-        auto iIzqSup = mr.find(esquinaIzqSup);
-        auto iDerSup = mr.find(esquinaDerSup);
-        auto iIzqInf = mr.find(esquinaIzqInf);
-        auto iDerInf = mr.find(esquinaDerInf);
-
-        for (auto i = iIzqSup; i != iDerSup; i++) {
-            for (auto j = i; j != iIzqInf; j++) {
-                for (auto k = j->begin(); k != j->end(); k++) {
-                    if (distanciaPuntos(*k, centro) <= radio)
-                        resultado.push_back(*k);
+        limiteInf = coordX - (radio / 111.1);
+        limiteSup = coordX + (radio / 111.1);
+        limiteIzq = coordY - (radio / 111.1);
+        limiteDer = coordY + (radio / 111.1);
+        double posY = limiteIzq;
+        while (posY <= limiteDer) {
+            double posX = limiteInf;
+            while (posX <= limiteSup) {
+                if (posX >= _aXMin && posX <= _aXMax && posY >= _aYMin && posY <= _aYMax) {
+                    Casilla* casillaActual = obtenerCasilla(posX, posY);
+                    typename std::list<T>::iterator iter = casillaActual->puntos.begin();
+                    while (iter != casillaActual->puntos.begin()) {
+                        UTM centro(xcentro, ycentro);
+                        UTM otro((*iter)->getX(), (*iter)->getY());
+                        float distanciaCalculada = haversine(centro,otro);
+                        if (distanciaCalculada <= radio) {
+                            toRet.push_back(*iter);
+                        }
+                        ++iter;
+                    }
                 }
+                posX += tamaCasillaX;
             }
+            posY += tamaCasillaY;
         }
-
-        return resultado;
+        return toRet;
     }
 
+
+
     unsigned maxElementosPorCelda() {
-        // Variable donde vamos a guardar el maximo que encontremos
+
         int numMax = 0;
 
-        // Aqui lo que hago es definir las casillas de las cuatros esquinas para poder recorrer la malla entera
-        Casilla<T> &izqSup = obtenerCasilla(_aXMin, _aYMax), izqInf = obtenerCasilla(_aXMin, _aYMin), derSup =
+
+        Casilla &izqSup = obtenerCasilla(_aXMin, _aYMax), izqInf = obtenerCasilla(_aXMin, _aYMin), derSup =
                 obtenerCasilla(_aXMax, _aYMax), derInf = obtenerCasilla(_aXMax, _aYMin);
 
-        // Aqui los iteradores
+
         auto iIzqSup = mr.find(izqSup);
         auto iDerSup = mr.find(derSup);
         auto iIzqInf = mr.find(izqInf);
         auto iDerInf = mr.find(derInf);
 
-        // El for recorre toda la malla y guarda en una variable el numero maximo de elementos que vaya encontrando
+
         for (auto i = iIzqSup; i != iDerSup; i++) {
             for (auto j = i; j != iIzqInf; j++) {
                 // if que comprueba si el numero de elementos de la posicion actual es mayor que el guardado anteriormente
@@ -120,24 +168,22 @@ public:
     }
 
     float promedioElementosPorCelda() {
-        // Calculamos el numero de casillas y las guardamos en una variable
+
         int numCasillas = ((_aXMax - _aXMin) / tamaCasillaX) * ((_aYMax - _aYMin) / tamaCasillaY);
 
-        // Vamos sumando todos los puntos que hay en cada casilla para al final dividirlo entre el numCasillas
+
         int numElementos = 0;
 
-        // Volvemos a utilizar los for de antes para recorrer la malla entera
-        // Aqui lo que hago es definir las casillas de las cuatros esquinas para poder recorrer la malla entera
-        Casilla<T> &izqSup = obtenerCasilla(_aXMin, _aYMax), izqInf = obtenerCasilla(_aXMin, _aYMin), derSup =
+
+        Casilla &izqSup = obtenerCasilla(_aXMin, _aYMax), izqInf = obtenerCasilla(_aXMin, _aYMin), derSup =
                 obtenerCasilla(_aXMax, _aYMax), derInf = obtenerCasilla(_aXMax, _aYMin);
 
-        // Aqui los iteradores
+
         auto iIzqSup = mr.find(izqSup);
         auto iDerSup = mr.find(derSup);
         auto iIzqInf = mr.find(izqInf);
         auto iDerInf = mr.find(derInf);
 
-        // El for recorre toda la malla y guarda en una variable el numero maximo de elementos que vaya encontrando
         for (auto i = iIzqSup; i != iDerSup; i++) {
             for (auto j = i; j != iIzqInf; j++) {
                 // if que comprueba si el numero de elementos de la posicion actual es mayor que el guardado anteriormente
