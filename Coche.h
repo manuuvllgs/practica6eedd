@@ -5,6 +5,7 @@
 #ifndef PRACTICA01_COCHE_H
 #define PRACTICA01_COCHE_H
 #include <iostream>
+#include <map>
 #include <queue>
 
 #include "fecha.h"
@@ -78,9 +79,13 @@ private:
     UTM _lugar;
     int _max = 0;
     int _cochAlm = 0;
-    std::priority_queue<Coche *> _almacenados;
+    std::multimap<int, Coche*> _almacenados;
 
 public:
+    UTM lugar() const {
+        return _lugar;
+    }
+
     PuntoRecarga(int id, float latitud, float longitud, int max);
 
     Coche *getMaxBateria();

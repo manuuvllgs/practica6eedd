@@ -69,7 +69,7 @@ void Coche::circular() {
     if(_charging->_almacenados.empty()) {
         throw std::invalid_argument("Coche::circular(): No hay coches almacenados en la cola de prioridad");
     }
-    _charging->_almacenados.pop();
+    _charging->_almacenados.begin();
     _charging->_cochAlm--;
     _charging = nullptr;
 }
