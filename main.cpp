@@ -30,8 +30,6 @@ unsigned long djb2(std::string str) {
 int main() {
     // ---------------Ejercicio 1---------------------
 
-    // Lectura de coches y guardado en avlCoches
-
     Reanelcar app;
     ThashUsuario usersNifs(10001);
     app.creaTablaHash(&usersNifs);
@@ -188,7 +186,6 @@ int main() {
 
         is.close();
 
-
         std::cout << "Tiempo lectura: " << ((clock() - t_ini) / (float) CLOCKS_PER_SEC) << " segs." << std::endl;
     } else {
         std::cout << "Error de apertura en archivo" << std::endl;
@@ -198,73 +195,6 @@ int main() {
     // Ejercicio hecho en los .h
 
     //-------------------Ejercicio 3------------------------
-
-
-
-    contador = 0;
-    std::string nom = "";
-    std::string lat = "";
-    std::string lon = "";
-    std::vector<std::pair<std::string, UTM> > destinos;
-    float latMin=0, latMax=0, lonMin=0, lonMax=0;
-
-
-    is.open(
-        "../destino.csv");
-    //carpeta de proyecto
-
-    if (is.good()) {
-        clock_t t_ini = clock();
-
-        while (getline(is, fila)) {
-            //¿Se ha leído una nueva fila?
-            if (fila != "") {
-                columnas.str(fila);
-
-
-                getline(columnas, nom, ','); //leemos caracteres hasta encontrar y omitir ';'
-                getline(columnas, lat, ',');
-                getline(columnas, lon, ',');
-
-
-
-                UTM dato(std::stoi(lat), std::stof(lon));
-
-                destinos.push_back(std::pair(nom, dato));
-                if (latMin > dato.lat()) {
-                    latMin = dato.lat();
-                }
-                if (lonMin > dato.lon()) {
-                    lonMin = dato.lon();
-                }
-                if (latMax < dato.lat()) {
-                    latMax = dato.lat();
-                }
-                if (lonMax < dato.lon()) {
-                    lonMax = dato.lon();
-                }
-
-
-                fila = "";
-                columnas.clear();
-
-                i++;
-            }
-        }
-
-        is.close();
-
-        std::cout << "Tiempo lectura: " << ((clock() - t_ini) / (float) CLOCKS_PER_SEC) << " segs." << std::endl;
-    } else {
-        std::cout << "Error de apertura en archivo" << std::endl;
-    }
-
-
-//Ahora calculamos las divisiones sabiendo que queremos que tengan entre 10 y 15 coches por division
-    float nDiv= destinos.size()/(float)12;
-    std::cout << nDiv;
-
-
 
 
     //-------------------Ejercicio 4-------------------------

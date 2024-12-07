@@ -155,6 +155,8 @@ void crearMalla(float aXMin, float aYMin, float aXMax, float aYMax,float ndiv) {
         locate = aux;
     }
 
+
+
 };
 
 class Usuario {

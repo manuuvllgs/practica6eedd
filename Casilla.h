@@ -7,6 +7,7 @@
 #include <list>
 #include "MallaRegular.h"
 
+template<typename T>
 
 
 
