@@ -9,7 +9,7 @@ PuntoRecarga::PuntoRecarga(int id, float latitud, float longitud, int max): _id(
 }
 
 Coche* PuntoRecarga::getMaxBateria() {
-    return _almacenados.top();
+    return _almacenados.begin()->second;
 }
 
 
@@ -17,7 +17,7 @@ bool PuntoRecarga::addCoche(Coche *c) {
     if (c->getCharging() || _cochAlm + 1 > _max) {
         return false;
     }
-    _almacenados.push(c);
+    _almacenados.insert(std::make_pair(c->getNivelBateria(),c));
     _cochAlm++;
     c->setCharging(this);
 
