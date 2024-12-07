@@ -4,6 +4,17 @@
 
 #include "Reanelcar.h"
 
+float haversine2(UTM utm1, UTM utm2) {
+    float radio_tierra = 6378;
+    float incrLat = (utm2.lat() - utm1.lat()) * (M_PI / 180);
+    float incrLon = (utm2.lon() - utm1.lon()) * (M_PI / 180);
+    float a = sin(incrLat / 2) * sin(incrLat / 2) + cos(utm1.lat() * (M_PI / 180)) * cos(utm2.lat() * (M_PI / 180))
+              * sin(incrLon / 2) * sin(incrLon / 2);
+    float c = 2 * atan2(sqrt(a), sqrt(1 - a));
+    float d = radio_tierra * c;
+    return d;
+}
+
 void Usuario::setCoche(Coche *c) {
     rent = c;
 }
@@ -48,10 +59,11 @@ Coche *Usuario::iniciaTrayecto(int idPuntoInicio, int idPuntoFinal, Fecha &fInic
     return aDev;
 }
 
-void Usuario::aparcaCoche(Coche *c, PuntoRecarga *pr, int retraso) {
+void Usuario::aparcaCoche(Coche *c, PuntoRecarga *pr){
     this->usrReanel->colocarCochePR(c, pr);
     rent = nullptr;
-    _puntos = decrementaPuntos(retraso);
+    int distancia = haversine2(UTM(c->getX(),c->getY()),pr->lugar());
+    _puntos = decrementaPuntos(distancia);
 }
 
 int Usuario::decrementaPuntos(int retraso) {
@@ -101,3 +113,4 @@ void Usuario::mostarDatos() {
         }
     }
 }
+
