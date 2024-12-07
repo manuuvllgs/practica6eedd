@@ -10,6 +10,10 @@ class UTM {
     float _lat, _lon;
 
 public:
+    UTM() = default;
+
+    ~UTM() = default;
+
     float lat() const {
         return _lat;
     }
