@@ -201,7 +201,7 @@ int main() {
     std::string lat = "";
     std::string lon = "";
     std::vector<std::pair<std::string, UTM> > destinos;
-    float latMin=0, latMax=0, lonMin=0, lonMax=0;
+    float latMin = 0, latMax = 0, lonMin = 0, lonMax = 0;
 
 
     is.open(
@@ -220,7 +220,6 @@ int main() {
                 getline(columnas, nom, ','); //leemos caracteres hasta encontrar y omitir ';'
                 getline(columnas, lat, ',');
                 getline(columnas, lon, ',');
-
 
 
                 UTM dato(std::stoi(lat), std::stof(lon));
@@ -256,7 +255,7 @@ int main() {
 
 
     //Ahora calculamos las divisiones sabiendo que queremos que tengan entre 10 y 15 coches por division
-    float nDiv= destinos.size()/(float)12;
+    float nDiv = destinos.size() / (float) 12;
     std::cout << nDiv;
     //-------------------Ejercicio 4-------------------------
 
@@ -300,7 +299,119 @@ int main() {
             }
         }
     }
+    //-------------------Ejercicio 5-------------------------
 
+    std::vector<PuntoRecarga>::iterator itS;
+    Fecha fDada(12, 11, 2024);
+    Fecha hoy;
+    std::list<Usuario>::iterator itU;
+    itU = app.getUsers().begin();
+    itS = app.sites()->begin();
+
+    std::list<Usuario *> usrW = app.buscarUsrNomb("A");
+    bool encontrado = false;
+    auto itUsrW = usrW.begin();
+    cont = 0;
+    auto auxItUsrw = usrW.begin();
+    for (i = 0; i < usrW.size(); i++) {
+        hoy = fDada;
+        if (itUsrW.operator*()->getNombre()[0] == 'A') {
+            if (itS == app.sites()->end()) {
+                cont = 0;
+                itS = app.sites()->begin();
+            }
+            if (itS->getNumCoches() != 0) {
+                if (encontrado == false) {
+                    encontrado = true;
+                    auxItUsrw = itUsrW;
+                }
+                hoy.anadirDias(rand() % 3);
+                itUsrW.operator*()->iniciaTrayecto(cont, (cont + 1) % 50, fDada, hoy);
+                cont++;
+                itUsrW++;
+                itS++;
+            } else {
+                cont++;
+                itS++;
+            }
+        }
+    }
+    itUsrW = auxItUsrw;
+    for (int i = 0; i < 10; i++) {
+        Usuario *aux = itUsrW.operator*();
+        Trayecto *tray = aux->getTrayecto(fDada);
+        Coche *coch = tray->getInthecar();
+        std::cout << "Usuario " << i << std::endl
+                << "El nombre del usuario es:" << aux->getNombre() << std::endl
+                << "El NIF es:" << aux->getNif() << std::endl
+                << "La clave es:" << aux->getClave() << std::endl
+                << "La direccion es:" << aux->getDireccion() << std::endl;
+        std::cout << "La fecha de inicio de trayecto es:" << tray->getFechaInicio().cadena() << std::endl
+                << "La fecha de fin de trayecto es:" << tray->getFechaFinal().cadena() << std::endl
+                << "El Id del punto de recarga de origen es:" << tray->getOrigin()->getID() << std::endl
+                << "El Id del punto de recarga de destino es:" << tray->getDestination()->getID() << std::endl
+                << "El Id del trayecto es:" << tray->getIdTrayecto() << std::endl;
+        std::cout << "La matricula del coche es:" << coch->getIdMatricula() << std::endl
+                << "La marca del coche es:" << coch->getMarca() << std::endl
+                << "EL modelo del coche es:" << coch->getModelo() << std::endl
+                << "El nivel de bateria del coche es:" << coch->getNivelBateria() << std::endl;
+        itUsrW++;
+    }
+
+    //-------------------Ejercicio 6-------------------------
+
+
+    itU = app.getUsers().begin();
+    itS = app.sites()->begin();
+
+    std::list<Usuario *> usrB = app.buscarUsrNomb("B");
+    encontrado = false;
+    auto itUsrB = usrB.begin();
+    cont = 0;
+    auto auxItUsrB = usrB.begin();
+    for (i = 0; i < usrB.size(); i++) {
+        hoy = fDada;
+
+        if (itS == app.sites()->end()) {
+            cont = 0;
+            itS = app.sites()->begin();
+        }
+        if (itS->getNumCoches() != 0) {
+            if (encontrado == false) {
+                encontrado = true;
+                auxItUsrB = itUsrB;
+            }
+            hoy.anadirDias(rand() % 3);
+            itUsrB.operator*()->iniciaTrayecto(cont, (cont + 1) % 50, fDada, hoy);
+            cont++;
+            itUsrB++;
+            itS++;
+        } else {
+            cont++;
+            itS++;
+        }
+    }
+    itUsrB = auxItUsrB;
+    for (int i = 0; i < 10; i++) {
+        Usuario *aux = itUsrB.operator*();
+        Trayecto *tray = aux->getTrayecto(fDada);
+        Coche *coch = tray->getInthecar();
+        std::cout << "Usuario " << i << std::endl
+                << "El nombre del usuario es:" << aux->getNombre() << std::endl
+                << "El NIF es:" << aux->getNif() << std::endl
+                << "La clave es:" << aux->getClave() << std::endl
+                << "La direccion es:" << aux->getDireccion() << std::endl;
+        std::cout << "La fecha de inicio de trayecto es:" << tray->getFechaInicio().cadena() << std::endl
+                << "La fecha de fin de trayecto es:" << tray->getFechaFinal().cadena() << std::endl
+                << "El Id del punto de recarga de origen es:" << tray->getOrigin()->getID() << std::endl
+                << "El Id del punto de recarga de destino es:" << tray->getDestination()->getID() << std::endl
+                << "El Id del trayecto es:" << tray->getIdTrayecto() << std::endl;
+        std::cout << "La matricula del coche es:" << coch->getIdMatricula() << std::endl
+                << "La marca del coche es:" << coch->getMarca() << std::endl
+                << "EL modelo del coche es:" << coch->getModelo() << std::endl
+                << "El nivel de bateria del coche es:" << coch->getNivelBateria() << std::endl;
+        itUsrW++;
+    }
 
 
     return 0;

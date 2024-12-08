@@ -9,7 +9,9 @@ PuntoRecarga::PuntoRecarga(int id, float latitud, float longitud, int max): _id(
 }
 
 Coche* PuntoRecarga::getMaxBateria() {
-    return _almacenados.begin()->second;
+    auto it = _almacenados.end();
+    it--;
+    return it->second;
 }
 
 
