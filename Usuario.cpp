@@ -62,8 +62,17 @@ Coche *Usuario::iniciaTrayecto(int idPuntoInicio, int idPuntoFinal, Fecha &fInic
 void Usuario::aparcaCoche(Coche *c, PuntoRecarga *pr){
     usrReanel->locate1()->insertar(pr->lugar().lat(),pr->lugar().lon(),c);
     this->usrReanel->colocarCochePR(c, pr);
+    c->set_posicion(pr->lugar());
     rent = nullptr;
     int distancia = haversine2(UTM(c->getX(),c->getY()),pr->lugar());
+    _puntos = decrementaPuntos(distancia);
+}
+
+void Usuario::aparcaCoche(Coche *c, UTM pos){
+    usrReanel->locate1()->insertar(pos.lat(),pos.lon(),c);
+    c->set_posicion(pos);
+    rent = nullptr;
+    int distancia = haversine2(UTM(c->getX(),c->getY()),pos);
     _puntos = decrementaPuntos(distancia);
 }
 

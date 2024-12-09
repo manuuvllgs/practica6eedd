@@ -207,6 +207,8 @@ Coche *iniciaTrayecto(int idPuntoInicio, int idPuntoFinal, Fecha &fInicio, Fecha
 
 void aparcaCoche(Coche *c, PuntoRecarga *pr);
 
+void aparcaCoche(Coche *c, UTM pos);
+
 std::multimap<Fecha, Trayecto> &getTrayectosFecha(const Fecha &f);
 
 Trayecto *getTrayecto(Fecha &fIni);

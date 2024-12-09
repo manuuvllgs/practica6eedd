@@ -14,10 +14,8 @@ template<typename T>
 class MallaRegular {
 public:
     class Casilla {
-
     public:
         std::list<T> puntos;
-
 
 
         Casilla(): puntos() {
@@ -49,7 +47,6 @@ public:
         }
     };
 
-
 private:
     float _aXMin = 0;
     float _aXMax = 0;
@@ -57,7 +54,7 @@ private:
     float _aYMax = 0;
     float tamaCasillaX, tamaCasillaY;
 
-    std::vector<std::vector<Casilla > > mr;
+    std::vector<std::vector<Casilla> > mr;
 
 public:
     Casilla *obtenerCasilla(float x, float y) {
@@ -73,7 +70,7 @@ public:
         _aYMin(aYMin), _aYMax(aYMax) {
         tamaCasillaX = (aXMax - aXMin) / nDiv;
         tamaCasillaY = (aYMax - aYMin) / nDiv;
-        mr.insert(mr.begin(), nDiv, std::vector<Casilla >(nDiv));
+        mr.insert(mr.begin(), nDiv, std::vector<Casilla>(nDiv));
     };
 
     void insertar(float x, float y, const T &dato) {
@@ -102,8 +99,7 @@ public:
         return d;
     }
 
-    std::vector<T> buscarRadio(float xcentro, float ycentro, float radio)
-    {
+    std::vector<T> buscarRadio(float xcentro, float ycentro, float radio) {
         std::vector<T> toRet;
 
         double limiteIzq, limiteDer, limiteInf, limiteSup, coordX, coordY;
@@ -120,12 +116,12 @@ public:
             double posX = limiteInf;
             while (posX <= limiteSup) {
                 if (posX >= _aXMin && posX <= _aXMax && posY >= _aYMin && posY <= _aYMax) {
-                    Casilla* casillaActual = obtenerCasilla(posX, posY);
+                    Casilla *casillaActual = obtenerCasilla(posX, posY);
                     typename std::list<T>::iterator iter = casillaActual->puntos.begin();
                     while (iter != casillaActual->puntos.begin()) {
                         UTM centro(xcentro, ycentro);
                         UTM otro((*iter)->getX(), (*iter)->getY());
-                        float distanciaCalculada = haversine(centro,otro);
+                        float distanciaCalculada = haversine(centro, otro);
                         if (distanciaCalculada <= radio) {
                             toRet.push_back(*iter);
                         }
@@ -140,9 +136,7 @@ public:
     }
 
 
-
     unsigned maxElementosPorCelda() {
-
         int numMax = 0;
 
 
@@ -168,7 +162,6 @@ public:
     }
 
     float promedioElementosPorCelda() {
-
         int numCasillas = ((_aXMax - _aXMin) / tamaCasillaX) * ((_aYMax - _aYMin) / tamaCasillaY);
 
 

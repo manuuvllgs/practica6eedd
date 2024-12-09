@@ -418,20 +418,19 @@ int main() {
 
     //--------------------Ejercicio 7--------------------------
     // Creamos la malla
-    app.crearMalla(latMin,lonMin,latMax,lonMax,nDiv);
+    app.crearMalla(latMin, lonMin, latMax, lonMax, nDiv);
 
-    std::cout << std::endl << std::endl << std::endl<< "Ejercicio 4 " << std::endl;
-    itUsrB=usrB.begin();
-        while (itUsrB != usrB.end()) {
-            itUsrB.operator*()->aparcaCoche(itUsrB.operator*()->getRent(),
-                                             itUsrB.operator*()->getTrayecto(fDada)->getDestination());
-            itUsrB++;
-
-        }
+    std::cout << std::endl << std::endl << std::endl << "Ejercicio 4 " << std::endl;
+    itUsrB = usrB.begin();
+    while (itUsrB != usrB.end()) {
+        itUsrB.operator*()->aparcaCoche(itUsrB.operator*()->getRent(),
+                                        itUsrB.operator*()->getTrayecto(fDada)->getDestination());
+        itUsrB++;
+    }
 
     itUsrB = usrB.begin();
     for (int i = 0; i < 10; ++i) {
-        std::cout << " | Usaurio " << i + 1 << ": " << itUsrB.operator*()->getNombre()<< std::endl;
+        std::cout << " | Usaurio " << i + 1 << ": " << itUsrB.operator*()->getNombre() << std::endl;
         std::cout << " | Puntos del usuario: " << itUsrB.operator*()->getPuntos();
         std::cout << " | Origen: " << itUsrB.operator*()->getTrayecto(fDada)->getOrigin()->getID();
         std::cout << " | Destino: " << itUsrB.operator*()->getTrayecto(fDada)->getDestination()->getID();
@@ -441,9 +440,51 @@ int main() {
         std::cout << std::endl;
         ++itUsrB;
     }
-    //--------------------Ejercicio8--------------------------
 
 
+    //--------------------Ejercicio 8--------------------------
+
+    itUsrW = usrW.begin();
+    while (itUsrW != usrW.end()) {
+        bool encontrado = false;
+        for (int i = 0; i < usrW.size() && encontrado == false; ++i) {
+            if (destinos[i].first == itUsrW.operator*()->getNombre()) {
+                itUsrW.operator*()->aparcaCoche(itUsrW.operator*()->getRent(),
+                                                destinos[i].second);
+                encontrado = 1;
+            }
+        }
+
+        itUsrW++;
+    }
+
+    itUsrW = usrW.begin();
+    for (int i = 0; i < 10; ++i) {
+        std::cout << " | Usaurio " << i + 1 << ": " << itUsrW.operator*()->getNombre() << std::endl;
+        std::cout << " | Puntos del usuario: " << itUsrW.operator*()->getPuntos();
+        std::cout << " | Origen: " << itUsrW.operator*()->getTrayecto(fDada)->getOrigin()->getID();
+        std::cout << " | Destino: " << itUsrW.operator*()->getTrayecto(fDada)->getDestination()->getID();
+        std::cout << " | Coche alquilado: " << itUsrW.operator*()->getTrayecto(fDada)->getInthecar()->
+                getIdMatricula();
+        std::cout << " | Fecha: " << itUsrW.operator*()->getTrayecto(fDada)->getFechaFinal();
+        std::cout << std::endl;
+        ++itUsrW;
+    }
+
+    //------------------Ejercicio 9-------------------------
+    std::vector<Coche*> cercanos = app.locate1()->buscarRadio(37.7692200,-3.7902800,10);
+    for (int i = 0; i < cercanos.size(); ++i) {
+        std::cout << cercanos.operator[](i)->getIdMatricula();
+    }
+
+    app.locate1()->obtenerCasilla(37.7692200,-3.7902800);
+
+    std::cout << "La matricula del coche mas cercano a Jaen es: " << app.buscarCocheMasCercano(UTM(37.7692200,-3.7902800)).operator[](0)->getIdMatricula();
+
+    //------------------Ejercicio 10----------------------
+    std::cout << "La matricula del coche mas cercano al punto de recarga con ID 43 es: " << app.buscarCocheMasCercano(app.sites()->operator[](42).lugar()).operator[](0)->getIdMatricula();
+
+    //------------------Ejercicio 11------------------------
 
     return 0;
 }
