@@ -1,3 +1,0 @@
-D:/Universidad/Practicas_Clion/Segundo/1erCuatrimestre/EstructurasDeDatos/practica6eedd/cmake-build-debug/CMakeFiles/Pr4_VillegasAceituno_Manuel.dir
-D:/Universidad/Practicas_Clion/Segundo/1erCuatrimestre/EstructurasDeDatos/practica6eedd/cmake-build-debug/CMakeFiles/edit_cache.dir
-D:/Universidad/Practicas_Clion/Segundo/1erCuatrimestre/EstructurasDeDatos/practica6eedd/cmake-build-debug/CMakeFiles/rebuild_cache.dir
