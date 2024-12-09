@@ -26,6 +26,17 @@ unsigned long djb2(std::string str) {
     return hash;
 }
 
+float haversine3(UTM utm1, UTM utm2) {
+    float radio_tierra = 6378;
+    float incrLat = (utm2.lat() - utm1.lat()) * (M_PI / 180);
+    float incrLon = (utm2.lon() - utm1.lon()) * (M_PI / 180);
+    float a = sin(incrLat / 2) * sin(incrLat / 2) + cos(utm1.lat() * (M_PI / 180)) * cos(utm2.lat() * (M_PI / 180))
+              * sin(incrLon / 2) * sin(incrLon / 2);
+    float c = 2 * atan2(sqrt(a), sqrt(1 - a));
+    float d = radio_tierra * c;
+    return d;
+}
+
 
 int main() {
     // ---------------Ejercicio 1---------------------
@@ -472,25 +483,42 @@ int main() {
     }
 
     //------------------Ejercicio 9-------------------------
-    std::vector<Coche*> cercanos = app.locate1()->buscarRadio(37.7692200,-3.7902800,10);
-    std::cout<< "Los coches mas cercanos a jaen son: ";
+    std::vector<Coche *> cercanos = app.locate1()->buscarRadio(37.7692200, -3.7902800, 10);
+    std::cout << "Los coches mas cercanos a jaen son: ";
     for (int i = 0; i < cercanos.size(); ++i) {
-        if (i %20 == 0) {
+        if (i % 20 == 0) {
             std::cout << std::endl;
         }
-        std::cout  << cercanos.operator[](i)->getIdMatricula() << "|";
-
+        std::cout << cercanos.operator[](i)->getIdMatricula() << "|";
     }
 
     std::cout << std::endl;
 
-    std::string matricula = app.buscarCocheMasCercano(UTM(37.7692200,-3.7902800)).operator[](0)->getIdMatricula();
+    std::string matricula = app.buscarCocheMasCercano(UTM(37.7692200, -3.7902800)).operator[](0)->getIdMatricula();
     std::cout << "La matricula del coche mas cercano es: " << matricula << std::endl;
 
     //------------------Ejercicio 10----------------------
+
     matricula = app.buscarCocheMasCercano(app.sites()->operator[](42).lugar()).operator[](0)->getIdMatricula();
     std::cout << "La matricula del coche mas cercano al PR 43 es: " << matricula << std::endl;
+
     //------------------Ejercicio 11------------------------
+    PuntoRecarga *prMenorCochesJaen;
+    int menor = 1000;
+    for (int i = 0; i < app.sites()->size(); ++i) {
+        float distancia;
+        distancia = haversine3(app.sites()->operator[](i).lugar(), UTM(37.7692200, -3.7902800));
+        if (distancia < 15) {
+            if (app.sites()->operator[](i).getNumCoches() < menor) {
+                menor = app.sites()->operator[](i).getNumCoches();
+                prMenorCochesJaen = &app.sites()->operator[](i);
+            }
+        }
+    }
+    std::cout << "El punto de recarga con mayor numero de coches en un radio a 15kms de Jaén es el punto con ID " <<
+            prMenorCochesJaen->getID() << " con " << menor << " coches";
+
+
 
     return 0;
 }
