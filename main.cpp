@@ -228,16 +228,16 @@ int main() {
 
                 destinos.push_back(std::pair(nom, dato));
                 if (latMin > dato.lat()) {
-                    latMin = dato.lat();
+                    latMin = floor(dato.lat());
                 }
                 if (lonMin > dato.lon()) {
-                    lonMin = dato.lon();
+                    lonMin = floor(dato.lon());
                 }
                 if (latMax < dato.lat()) {
-                    latMax = dato.lat();
+                    latMax = ceil(dato.lat());
                 }
                 if (lonMax < dato.lon()) {
-                    lonMax = dato.lon();
+                    lonMax = ceil(dato.lon());
                 }
 
 
@@ -395,7 +395,7 @@ int main() {
         }
     }
     itUsrB = auxItUsrB;
-    for (int i = 0; i < 42; i++) {
+    for (int i = 0; i < 10; i++) {
         Usuario *aux = itUsrB.operator*();
         Trayecto *tray = aux->getTrayecto(fDada);
         Coche *coch = tray->getInthecar();
@@ -421,7 +421,7 @@ int main() {
     app.crearMalla(latMin,lonMin,latMax,lonMax,nDiv);
 
     std::cout << std::endl << std::endl << std::endl<< "Ejercicio 4 " << std::endl;
-
+    itUsrB=usrB.begin();
         while (itUsrB != usrB.end()) {
             itUsrB.operator*()->aparcaCoche(itUsrB.operator*()->getRent(),
                                              itUsrB.operator*()->getTrayecto(fDada)->getDestination());
@@ -441,7 +441,7 @@ int main() {
         std::cout << std::endl;
         ++itUsrB;
     }
-
+    //--------------------Ejercicio8--------------------------
 
 
 
