@@ -100,39 +100,38 @@ public:
     }
 
     std::vector<T> buscarRadio(float xcentro, float ycentro, float radio) {
-        std::vector<T> toRet;
+        std::vector<T> resultado;
 
-        double limiteIzq, limiteDer, limiteInf, limiteSup, coordX, coordY;
+        float radioCoords = radio / 111.1;
+        float limiteIzq = xcentro - radioCoords, limiteDer = xcentro + radioCoords;
+        float limiteInf = ycentro - radioCoords, limiteSup = ycentro + radioCoords;
 
-        coordX = xcentro;
-        coordY = ycentro;
+        if(limiteIzq < _aXMin) limiteIzq = _aXMin;
+        if(limiteDer > _aXMax) limiteDer = _aXMax;
+        if(limiteInf < _aYMin) limiteInf = _aYMin;
+        if(limiteSup > _aYMax) limiteSup = _aYMax;
 
-        limiteInf = coordX - (radio / 111.1);
-        limiteSup = coordX + (radio / 111.1);
-        limiteIzq = coordY - (radio / 111.1);
-        limiteDer = coordY + (radio / 111.1);
-        double posY = limiteIzq;
-        while (posY <= limiteDer) {
-            double posX = limiteInf;
-            while (posX <= limiteSup) {
+        for (float posX = limiteIzq; posX <= limiteDer; posX += tamaCasillaX) {
+            for (float posY = limiteInf; posY <= limiteSup; posY += tamaCasillaY) {
                 if (posX >= _aXMin && posX <= _aXMax && posY >= _aYMin && posY <= _aYMax) {
-                    Casilla *casillaActual = obtenerCasilla(posX, posY);
-                    typename std::list<T>::iterator iter = casillaActual->puntos.begin();
-                    while (iter != casillaActual->puntos.begin()) {
-                        UTM centro(xcentro, ycentro);
-                        UTM otro((*iter)->getX(), (*iter)->getY());
-                        float distanciaCalculada = haversine(centro, otro);
+                    Casilla* casillaActual = obtenerCasilla(posX, posY);
+                    if (!casillaActual) continue; // Esto lo que hace es ignorar las casillas nulas
+
+                    for (const auto& elemento : casillaActual->puntos) {
+                        UTM puntoCentro(xcentro,ycentro);
+                        UTM puntoElemento(elemento->getX(),elemento->getY());
+
+                        float distanciaCalculada = haversine(puntoCentro, puntoElemento);
+
                         if (distanciaCalculada <= radio) {
-                            toRet.push_back(*iter);
+                            resultado.push_back(elemento);
                         }
-                        ++iter;
                     }
                 }
-                posX += tamaCasillaX;
             }
-            posY += tamaCasillaY;
         }
-        return toRet;
+
+        return resultado;
     }
 
 

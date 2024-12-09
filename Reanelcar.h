@@ -141,7 +141,7 @@ std::vector<Coche*> buscarCocheMasCercano(UTM pos) {
         }
         std::vector<Coche*> toRet;
 
-        for (int i = 0; i<aux.size(); i++) {
+        for (int i = 0; i<10; i++) {
             UTM posCoche(aux[i]->getX(),aux[i]->getY());
             comprobacion = haversine1(pos,posCoche);
            if (comprobacion < disMenor) {
