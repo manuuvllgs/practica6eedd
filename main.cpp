@@ -201,7 +201,7 @@ int main() {
     std::string lat = "";
     std::string lon = "";
     std::vector<std::pair<std::string, UTM> > destinos;
-    float latMin = 0, latMax = 0, lonMin = 0, lonMax = 0;
+    float latMin = 10000000000, latMax = 0, lonMin = 10000000000, lonMax = -100000000;
 
 
     is.open(
@@ -222,7 +222,7 @@ int main() {
                 getline(columnas, lon, ',');
 
 
-                UTM dato(std::stoi(lat), std::stof(lon));
+                UTM dato(std::stof(lat), std::stof(lon));
 
                 destinos.push_back(std::pair(nom, dato));
                 if (latMin > dato.lat()) {
@@ -255,7 +255,7 @@ int main() {
 
 
     //Ahora calculamos las divisiones sabiendo que queremos que tengan entre 10 y 15 coches por division
-    float nDiv = destinos.size() / (float) 12;
+    float nDiv = 1489 / (float) 12;
     std::cout << nDiv;
     //-------------------Ejercicio 4-------------------------
 
@@ -392,7 +392,7 @@ int main() {
         }
     }
     itUsrB = auxItUsrB;
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 42; i++) {
         Usuario *aux = itUsrB.operator*();
         Trayecto *tray = aux->getTrayecto(fDada);
         Coche *coch = tray->getInthecar();
@@ -410,8 +410,36 @@ int main() {
                 << "La marca del coche es:" << coch->getMarca() << std::endl
                 << "EL modelo del coche es:" << coch->getModelo() << std::endl
                 << "El nivel de bateria del coche es:" << coch->getNivelBateria() << std::endl;
-        itUsrW++;
+        itUsrB++;
     }
+
+    //--------------------Ejercicio 7--------------------------
+    // Creamos la malla
+    app.crearMalla(latMin,lonMin,latMax,lonMax,nDiv);
+
+    std::cout << std::endl << std::endl << std::endl<< "Ejercicio 4 " << std::endl;
+
+        while (itUsrB != usrB.end()) {
+            itUsrB.operator*()->aparcaCoche(itUsrB.operator*()->getRent(),
+                                             itUsrB.operator*()->getTrayecto(fDada)->getDestination());
+            itUsrB++;
+
+        }
+
+    itUsrB = usrB.begin();
+    for (int i = 0; i < 10; ++i) {
+        std::cout << " | Usaurio " << i + 1 << ": " << itUsrB.operator*()->getNombre()<< std::endl;
+        std::cout << " | Puntos del usuario: " << itUsrB.operator*()->getPuntos();
+        std::cout << " | Origen: " << itUsrB.operator*()->getTrayecto(fDada)->getOrigin()->getID();
+        std::cout << " | Destino: " << itUsrB.operator*()->getTrayecto(fDada)->getDestination()->getID();
+        std::cout << " | Coche alquilado: " << itUsrB.operator*()->getTrayecto(fDada)->getInthecar()->
+                getIdMatricula();
+        std::cout << " | Fecha: " << itUsrB.operator*()->getTrayecto(fDada)->getFechaFinal();
+        std::cout << std::endl;
+        ++itUsrB;
+    }
+
+
 
 
     return 0;

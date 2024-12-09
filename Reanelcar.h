@@ -27,6 +27,10 @@ private:
     MallaRegular<Coche *> *locate;
 
 public:
+    MallaRegular<Coche *> * locate1() const {
+        return locate;
+    }
+
     Reanelcar(): _users(), _cars(), _sites(), _userNIF(), locate() {
     }
 

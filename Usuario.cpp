@@ -60,6 +60,7 @@ Coche *Usuario::iniciaTrayecto(int idPuntoInicio, int idPuntoFinal, Fecha &fInic
 }
 
 void Usuario::aparcaCoche(Coche *c, PuntoRecarga *pr){
+    usrReanel->locate1()->insertar(pr->lugar().lat(),pr->lugar().lon(),c);
     this->usrReanel->colocarCochePR(c, pr);
     rent = nullptr;
     int distancia = haversine2(UTM(c->getX(),c->getY()),pr->lugar());
