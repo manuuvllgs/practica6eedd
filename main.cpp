@@ -51,6 +51,8 @@ int main() {
     if (is.good()) {
         clock_t t_ini = clock();
 
+        std::getline(is, fila);
+
         while (getline(is, fila)) {
             //¿Se ha leído una nueva fila?
             if (fila != "") {
@@ -283,6 +285,7 @@ int main() {
                 try {
                     int idx = *itPunto;
                     app.sites()->operator[](idx).addCoche(&itC->second);
+
                     ++cont;
                     ++itC;
 

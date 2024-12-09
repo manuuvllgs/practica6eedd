@@ -32,6 +32,10 @@ public:
         return _posicion.lon();
     }
 
+    void set_posicion(const UTM &posicion) {
+        _posicion = posicion;
+    }
+
     float getX() {
         return _posicion.lat();
     }

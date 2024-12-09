@@ -19,6 +19,7 @@ bool PuntoRecarga::addCoche(Coche *c) {
     if (c->getCharging() || _cochAlm + 1 > _max) {
         return false;
     }
+    c->set_posicion(UTM(_lugar));
     _almacenados.insert(std::make_pair(c->getNivelBateria(),c));
     _cochAlm++;
     c->setCharging(this);
