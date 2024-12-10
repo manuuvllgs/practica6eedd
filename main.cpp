@@ -516,8 +516,17 @@ int main() {
         }
     }
     std::cout << "El punto de recarga con mayor numero de coches en un radio a 15kms de Jaén es el punto con ID " <<
-            prMenorCochesJaen->getID() << " con " << menor << " coches";
+            prMenorCochesJaen->getID() << " con " << menor << " coches" << std::endl;
+    std::cout << "La matricula de los coches en un radio de 25km alrededor del punto de recarga con mas coches cerca de Jaen son:" ;
+    UTM posPR(prMenorCochesJaen->lugar());
+    cercanos = app.locate1()->buscarRadio(posPR.lat(), posPR.lon(), 25);
+    for (int i = 0; i < cercanos.size(); ++i) {
+        if (i % 18 == 0) {
+            std::cout << std::endl;
+        }
+        std::cout << cercanos.operator[](i)->getIdMatricula() << "|";
 
+    }
 
 
     return 0;
