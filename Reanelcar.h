@@ -11,6 +11,7 @@
 #include "vector"
 #include "Coche.h"
 #include "MallaRegular.h"
+#include "img.h"
 #include "stdexcept"
 
 
@@ -25,6 +26,8 @@ private:
     std::vector<PuntoRecarga> _sites;
     ThashUsuario *_userNIF = nullptr;
     MallaRegular<Coche *> *locate;
+public:
+    std::vector<Coche*> ejVoluntario;
 
 public:
     MallaRegular<Coche *> * locate1() const {
@@ -102,6 +105,82 @@ public:
         float d = radio_tierra * c;
         return d;
     }
+
+    //Grafica
+void ejercicioVol(std::string nomFich){
+
+    RGBColor blanco (255,255,255);
+
+    Img img(600, 600, blanco);
+
+    int nfilas = img.numFilas();
+    int ncol = img.numColumnas();
+
+    std::cout << "Imagen creada con " << nfilas << " filas y " << ncol << " columnas." << std::endl;
+
+    // sabemos el tamaño de la caja envolvente de los datos, pero volver a calcular
+   // xmin=37, ymin=-4, xmax=39, ymax=-2
+    double minlat = 36;
+    double maxlat = 40;
+    double minlon = -5;
+    double maxlon = -1;
+
+
+    // Calculamos el número de pixeles asociados a un grado
+
+    std::cout << "lat: xmin = " << minlat <<  ", " << "xmax = " << maxlat << std::endl;
+    std::cout << "lon: ymin = " << minlon <<  ", " << "ymax = " << maxlon << std::endl;
+
+    double rangox = maxlat - minlat;
+    double rangoy = maxlon - minlon;
+
+    std::cout << "rango x = " << rangox << std::endl;
+    std::cout << "rango y = " << rangoy << std::endl;
+
+    std::cout << "nfilas = " << nfilas << std::endl;
+    std::cout << "ncol = " << ncol << std::endl;
+
+    double pixelPorGradoX = (double) (nfilas - 1) / rangox;
+    double pixelPorGradoY = (double) (ncol - 1) / rangoy;
+
+
+    std::cout << "Pixel por Grado X = " << pixelPorGradoX << std::endl;
+    std::cout << "Pixel por Grado Y = " << pixelPorGradoY << std::endl;
+
+    //Pintamos todos los coches aparcaos
+    int r = 0;
+    int g = 0;
+    int b = 255;
+
+    for (int i=0; i<ejVoluntario.size(); i++){
+        double vlat = ejVoluntario[i]->getX();//+20;
+        double vlon = ejVoluntario[i]->getY();//+20;
+
+        int posX = (vlat - minlat) * pixelPorGradoX;
+        int posY = ncol - 1 - ((vlon -minlon) * pixelPorGradoY);
+        img.pintarPixelGrande(posX,posY,r,g,b);
+        img.pintarPixel(posX,posY,r,g,b);
+    }
+
+    //Pintamos los Puntos de Recarga
+    r = 255;
+    g = 0;
+    b = 0;
+
+    for (int i=0; i<_sites.size(); i++){
+        double vlat = _sites[i].lugar().lat();//+20;
+        double vlon = _sites[i].lugar().lon();//+20;
+
+        int posX = (vlat - minlat) * pixelPorGradoX;
+        int posY = ncol - 1 - ((vlon -minlon) * pixelPorGradoY);
+        img.pintarPixelGrande(posX,posY,r,g,b);
+        //img.pintarPixel(posX,posY,r,g,b);
+    }
+
+
+    std::cout << "Operación realizada con exito, ahora visualizarlo con cualquier visor de imágenes" << std::endl;
+
+}
 
 
 

@@ -6,6 +6,8 @@
 #include "Reanelcar.h"
 #include "Coche.h"
 #include "stdexcept"
+#include "img.h"
+#include <cmath>
 
 #include <list>
 #include <vector>
@@ -434,8 +436,10 @@ int main() {
     std::cout << std::endl << std::endl << std::endl << "Ejercicio 4 " << std::endl;
     itUsrB = usrB.begin();
     while (itUsrB != usrB.end()) {
+        app.ejVoluntario.push_back(itUsrB.operator*()->getRent());
         itUsrB.operator*()->aparcaCoche(itUsrB.operator*()->getRent(),
                                         itUsrB.operator*()->getTrayecto(fDada)->getDestination());
+
         itUsrB++;
     }
 
@@ -528,6 +532,8 @@ int main() {
 
     }
 
+    //----------------------------Ej Voluntario--------------------------
 
+    app.ejercicioVol("mapaResultado.ppm");
     return 0;
 }

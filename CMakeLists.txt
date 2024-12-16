@@ -16,4 +16,5 @@ add_executable(Pr4_VillegasAceituno_Manuel
         MallaRegular.h
         Casilla.h
         main.cpp
+        img.cpp
 )
